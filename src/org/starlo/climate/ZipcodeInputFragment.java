@@ -4,23 +4,34 @@ import android.os.*;
 import android.app.*;
 import android.view.*;
 import android.widget.*;
+import android.content.*;
+
+import java.util.*;
 
 public class ZipcodeInputFragment extends Fragment
 {
     private ListView mList = null;
+    private Context mContext = null;
     private EditableArrayAdapter mAdapter = null;
-    private final String[] DEFAULT_ZIP_CODES = new String[]{"78757", "78758", "78759"};
+    private final String SAVED_ZIP_CODES_KEY = "codes";
+    private final String SAVED_ZIP_CODES_FILE = "zipcodes";
+    private final static Set<String> DEFAULT_ZIP_CODES =
+        Collections.unmodifiableSet(new HashSet<String>(Arrays.asList("78757", "78758", "78759")));
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        mContext = getActivity();
         View view = inflater.inflate(R.layout.zipcode_input, container, false);
         mList = (ListView)view.findViewById(R.id.list);
-        mAdapter = new EditableArrayAdapter(getActivity(), 0, DEFAULT_ZIP_CODES);
-        mAdapter.setOnRemoveItemClickListener(new RemoveFieldListener());
-        mList.setAdapter(mAdapter);
         Button addButton = (Button)view.findViewById(R.id.add);
         addButton.setOnClickListener(new AddFieldListener());
+
+        SharedPreferences preferences = mContext.getSharedPreferences(SAVED_ZIP_CODES_FILE, Context.MODE_PRIVATE);
+        Set<String> data = preferences.getStringSet(SAVED_ZIP_CODES_KEY, DEFAULT_ZIP_CODES);
+        mAdapter = new EditableArrayAdapter(mContext, 0, data.toArray(new String[data.size()]));
+        mAdapter.setOnRemoveItemClickListener(new RemoveFieldListener());
+        mList.setAdapter(mAdapter);
 
         return view;
     }
@@ -29,12 +40,22 @@ public class ZipcodeInputFragment extends Fragment
     {
         public void onClick(View view)
         {
-            String[] newList = new String[mAdapter.getCount()+1];
-            for(int i = 0; i < DEFAULT_ZIP_CODES.length; i++)
+            SharedPreferences preferences = mContext.getSharedPreferences(SAVED_ZIP_CODES_FILE, Context.MODE_PRIVATE);
+            Set<String> data = preferences.getStringSet(SAVED_ZIP_CODES_KEY, DEFAULT_ZIP_CODES);
+            int size = data.size();
+            String[] newList = new String[size+1];
+            for(int i = 0; i < size; i++)
             {
-                newList[i] = DEFAULT_ZIP_CODES[i];
+                View item = mList.getChildAt(i);
+                newList[i] = ((TextView)item.findViewById(R.id.text)).getText().toString();
             }
-            mAdapter = new EditableArrayAdapter(getActivity(), 0, newList);
+            newList[size] = "";
+            SharedPreferences.Editor editor = preferences.edit();
+            HashSet<String> uniqueSet = new HashSet<String>(Arrays.asList(newList));
+            editor.putStringSet(SAVED_ZIP_CODES_KEY, uniqueSet);
+            editor.commit();
+
+            mAdapter = new EditableArrayAdapter(getActivity(), 0, uniqueSet.toArray(new String[uniqueSet.size()]));
             mAdapter.setOnRemoveItemClickListener(new RemoveFieldListener());
             mList.setAdapter(mAdapter);
         }
