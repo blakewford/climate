@@ -8,7 +8,7 @@ import android.widget.*;
 public class ZipcodeInputFragment extends Fragment
 {
     private ListView mList = null;
-    private ArrayAdapter mAdapter = null;
+    private EditableArrayAdapter mAdapter = null;
     private final String[] DEFAULT_ZIP_CODES = new String[]{"78757", "78758", "78759"};
 
     @Override
@@ -17,6 +17,7 @@ public class ZipcodeInputFragment extends Fragment
         View view = inflater.inflate(R.layout.zipcode_input, container, false);
         mList = (ListView)view.findViewById(R.id.list);
         mAdapter = new EditableArrayAdapter(getActivity(), 0, DEFAULT_ZIP_CODES);
+        mAdapter.setOnRemoveItemClickListener(new RemoveFieldListener());
         mList.setAdapter(mAdapter);
         Button addButton = (Button)view.findViewById(R.id.add);
         addButton.setOnClickListener(new AddFieldListener());
@@ -34,7 +35,16 @@ public class ZipcodeInputFragment extends Fragment
                 newList[i] = DEFAULT_ZIP_CODES[i];
             }
             mAdapter = new EditableArrayAdapter(getActivity(), 0, newList);
+            mAdapter.setOnRemoveItemClickListener(new RemoveFieldListener());
             mList.setAdapter(mAdapter);
+        }
+    }
+
+    private class RemoveFieldListener implements View.OnClickListener
+    {
+        public void onClick(View view)
+        {
+            Integer position = (Integer)((View)view.getParent()).getTag();
         }
     }
 }
