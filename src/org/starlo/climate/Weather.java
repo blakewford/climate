@@ -1,8 +1,7 @@
 package org.starlo.climate;
 
-public class Weather
+public class Weather extends WeatherBrief
 {
-    public String name;
     public Long dt;
     public Long id;
 }

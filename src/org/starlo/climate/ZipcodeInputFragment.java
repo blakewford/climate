@@ -90,7 +90,7 @@ public class ZipcodeInputFragment extends Fragment
                 newList[i] = readFromListUI(i);
             }
             updateAdapter(((MainActivity)mContext).writeBackPreferences(newList));
-            mContext.startActivity(new Intent(mContext, WeatherActivity.class));
+            mContext.startActivity(new Intent(mContext, CompareWeatherActivity.class));
         }
     }
 }

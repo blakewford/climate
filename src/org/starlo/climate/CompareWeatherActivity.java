@@ -14,11 +14,11 @@ import org.apache.http.client.methods.HttpGet;
 
 import com.google.gson.*;
 
-public class WeatherActivity extends FragmentActivity
+public class CompareWeatherActivity extends FragmentActivity
 {
     private ProgressDialog mDialog = null;
-    private ArrayList<Weather> mValidWeather = null;
-    private WeatherFragment mWeatherFragment = null;
+    private ArrayList<WeatherBrief> mValidWeather = null;
+    private CompareWeatherFragment mWeatherFragment = null;
 
     private Gson mGson = new Gson(); //Take advantage of caching
 
@@ -36,8 +36,8 @@ public class WeatherActivity extends FragmentActivity
         mDialog.setTitle(getResources().getString(R.string.working));
         mDialog.setCancelable(false);
 
-        mValidWeather = new ArrayList<Weather>();
-        mWeatherFragment = (WeatherFragment)getFragmentManager().findFragmentById(R.id.weather);
+        mValidWeather = new ArrayList<WeatherBrief>();
+        mWeatherFragment = (CompareWeatherFragment)getFragmentManager().findFragmentById(R.id.weather);
 
         mDialog.show();
         Iterator iterator = MainActivity.readPreferences(this).iterator();
@@ -79,7 +79,7 @@ public class WeatherActivity extends FragmentActivity
             try
             {
                 String buffer = httpGetResponse(OWM_PREAMBLE+(String)iterator.next()+OWM_POSTAMBLE+OWM_KEY);
-                Weather sample = mGson.fromJson(buffer, Weather.class);
+                WeatherBrief sample = mGson.fromJson(buffer, WeatherBrief.class);
                 if(sample != null)
                 {
                     mValidWeather.add(sample);
@@ -99,7 +99,7 @@ public class WeatherActivity extends FragmentActivity
             }
             else
             {
-                mWeatherFragment.setAdapter(mValidWeather.toArray(new Weather[mValidWeather.size()]));
+                mWeatherFragment.setAdapter(mValidWeather.toArray(new WeatherBrief[mValidWeather.size()]));
                 mDialog.dismiss();
             } 
         }

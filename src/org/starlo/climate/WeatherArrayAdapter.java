@@ -4,13 +4,13 @@ import android.view.*;
 import android.widget.*;
 import android.content.*;
 
-public class WeatherArrayAdapter extends ArrayAdapter<Weather>
+public class WeatherArrayAdapter extends ArrayAdapter<WeatherBrief>
 {
     private Context mContext = null;
-    private Weather[] mItems = null;
+    private WeatherBrief[] mItems = null;
     private LayoutInflater mInflater = null;
 
-    public WeatherArrayAdapter(Context context, int resource, Weather[] items)
+    public WeatherArrayAdapter(Context context, int resource, WeatherBrief[] items)
     {
         super(context, resource, items);
 
