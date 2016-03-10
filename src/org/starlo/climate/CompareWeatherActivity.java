@@ -23,7 +23,7 @@ public class CompareWeatherActivity extends FragmentActivity
     private Gson mGson = new Gson(); //Take advantage of caching
 
     private static String OWM_PREAMBLE = "http://api.openweathermap.org/data/2.5/weather?zip=";
-    private static String OWM_POSTAMBLE = ",us&appid=";
+    private static String OWM_POSTAMBLE = ",us&units=imperial&appid=";
     private static String OWM_KEY = "44db6a862fba0b067b1930da0d769e98";
 
     @Override

@@ -24,7 +24,10 @@ public class WeatherArrayAdapter extends ArrayAdapter<WeatherBrief>
         if(convertView == null)
         {
             convertView = mInflater.inflate(R.layout.weather_item, null);
-            ((TextView)convertView.findViewById(R.id.location)).setText(mItems[position].name);
+            WeatherBrief brief = mItems[position];
+            ((TextView)convertView.findViewById(R.id.temp)).setText(brief.main.temp.toString()+" F");
+            ((TextView)convertView.findViewById(R.id.condition)).setText(brief.weather[0].main);
+            ((TextView)convertView.findViewById(R.id.location)).setText(brief.name);
         }
 
         return convertView;
