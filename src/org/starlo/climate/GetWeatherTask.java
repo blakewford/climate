@@ -20,7 +20,7 @@ public class GetWeatherTask extends AsyncTask<Iterator, Void, Iterator>
     private WeatherFragmentInterface mWeatherFragment = null;
 
     protected Gson mGson = new Gson(); //Take advantage of caching
-    protected static ArrayList<Weather> mValidWeather = new ArrayList<Weather>();
+    protected static ArrayList<Weather> mWeatherResults = new ArrayList<Weather>();
 
     protected static final String OWM_PREAMBLE = "http://api.openweathermap.org/data/2.5/weather?zip=";
     protected static final String OWM_POSTAMBLE = ",us&units=imperial&appid=";
@@ -60,11 +60,17 @@ public class GetWeatherTask extends AsyncTask<Iterator, Void, Iterator>
             String zipcode = (String)iterator.next();
             String buffer = httpGetResponse(OWM_PREAMBLE+zipcode+OWM_POSTAMBLE+OWM_KEY);
             WeatherBrief sample = mGson.fromJson(buffer, WeatherBrief.class);
+            Weather entry = null;
             if(sample != null)
             {
-                sample.zipcode = zipcode;
-                mValidWeather.add(new Weather(sample));
+                entry = new Weather(sample);
             }
+            else
+            {
+                entry = new WeatherPlaceholder(zipcode);
+            }
+            entry.zipcode = zipcode;
+            mWeatherResults.add(entry);
         }catch(Exception e)
         {
         }
@@ -80,8 +86,8 @@ public class GetWeatherTask extends AsyncTask<Iterator, Void, Iterator>
         }
         else
         {
-            mWeatherFragment.setAdapter(mValidWeather.toArray(new Weather[mValidWeather.size()]));
-            mValidWeather.clear();
+            mWeatherFragment.setAdapter(mWeatherResults.toArray(new Weather[mWeatherResults.size()]));
+            mWeatherResults.clear();
             mDialog.dismiss();
         } 
     }

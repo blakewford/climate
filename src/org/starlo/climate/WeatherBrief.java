@@ -8,4 +8,5 @@ public class WeatherBrief
 
     //Set after JSON parsing, works as reverse pointer
     public String zipcode;
+    public boolean placeholder = false;
 }

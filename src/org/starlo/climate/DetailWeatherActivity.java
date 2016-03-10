@@ -53,11 +53,13 @@ public class DetailWeatherActivity extends FragmentActivity
                 String zipcode = (String)iterator.next();
                 String buffer = httpGetResponse(OWM_PREAMBLE+zipcode+OWM_POSTAMBLE+OWM_KEY);
                 Weather sample = mGson.fromJson(buffer, Weather.class);
-                if(sample != null)
+                if(sample == null)
                 {
-                    sample.zipcode = zipcode;
-                    mValidWeather.add(sample);
+                    sample = new WeatherPlaceholder(zipcode);
                 }
+                sample.zipcode = zipcode;
+                mWeatherResults.add(sample);
+
             }catch(Exception e)
             {
             }
