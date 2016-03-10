@@ -48,7 +48,8 @@ public class MainActivity extends Activity
     public TreeSet<String> writeBackPreferences(String[] list)
     {
         TreeSet<String> uniqueSet = new TreeSet<String>(Arrays.asList(list));
-        mDialog.show();
+        //Distracting at the moment, perhaps is uniqueSet.size() > some empirically tested value
+        //mDialog.show();
         new WriteBackPreferencesTask().execute(uniqueSet);
 
         return uniqueSet;
