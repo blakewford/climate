@@ -69,7 +69,26 @@ public class ZipcodeInputFragment extends Fragment
     {
         public void onClick(View view)
         {
+            SharedPreferences preferences = mContext.getSharedPreferences(SAVED_ZIP_CODES_FILE, Context.MODE_PRIVATE);
+            Set<String> data = preferences.getStringSet(SAVED_ZIP_CODES_KEY, DEFAULT_ZIP_CODES);
+
+            int index = 0;
+            String[] newList = new String[data.size()-1];
             Integer position = (Integer)((View)view.getParent()).getTag();
+            for(int i = 0; i < data.size(); i++)
+            {
+                if(i != position)
+                {
+                    View item = mList.getChildAt(i);
+                    newList[index++] = ((TextView)item.findViewById(R.id.text)).getText().toString();
+                }
+            }
+            HashSet<String> uniqueSet = new HashSet<String>(Arrays.asList(newList));
+            mDialog.show();
+            new WriteBackPreferencesTask().execute(uniqueSet);
+            mAdapter = new EditableArrayAdapter(getActivity(), 0, uniqueSet.toArray(new String[uniqueSet.size()]));
+            mAdapter.setOnRemoveItemClickListener(new RemoveFieldListener());
+            mList.setAdapter(mAdapter);
         }
     }
 
