@@ -2,7 +2,6 @@ package org.starlo.climate;
 
 import android.os.*;
 import android.app.*;
-import android.util.*;
 
 import org.apache.http.*;
 import org.apache.http.client.*;

@@ -2,6 +2,11 @@ package org.starlo.climate;
 
 public class Weather extends WeatherBrief
 {
+    public Coordinates coord;
+    public WindReport wind;
+    public CloudReport cloud;
+    public RainReport rain;
+    public SnowReport snow;
     public Long dt;
     public Long id;
 
