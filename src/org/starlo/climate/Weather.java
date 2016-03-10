@@ -19,5 +19,10 @@ public class Weather extends WeatherBrief
 
         dt = 0L;
         id = 0L;
+        coord = null;
+        wind = null;
+        clouds = null;
+        rain = null;
+        snow = null;
     }
 }

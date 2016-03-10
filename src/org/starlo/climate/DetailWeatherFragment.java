@@ -34,7 +34,7 @@ public class DetailWeatherFragment extends Fragment implements WeatherFragmentIn
             ((TextView)mActivity.findViewById(R.id.location)).setText(weather.name);
             buffer = weather.coord.lat+", "+weather.coord.lon;
             ((TextView)mActivity.findViewById(R.id.coordinates)).setText(buffer);
-            buffer = "Wind Speed"+weather.wind.speed.toString()+" at "+weather.wind.deg.toString();
+            buffer = "Wind Speed "+weather.wind.speed.toString()+" at "+weather.wind.deg.toString();
             ((TextView)mActivity.findViewById(R.id.wind)).setText(buffer);
             buffer = "Cloud Cover "+weather.clouds.all.toString()+"%";
             ((TextView)mActivity.findViewById(R.id.cloud)).setText(buffer);
