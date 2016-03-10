@@ -16,16 +16,15 @@ import com.google.gson.*;
 
 public class GetWeatherTask extends AsyncTask<Iterator, Void, Iterator>
 {
-    private Gson mGson = new Gson(); //Take advantage of caching
-
     private ProgressDialog mDialog = null;
     private WeatherFragmentInterface mWeatherFragment = null;
 
-    private static ArrayList<Weather> mValidWeather = new ArrayList<Weather>();
+    protected Gson mGson = new Gson(); //Take advantage of caching
+    protected static ArrayList<Weather> mValidWeather = new ArrayList<Weather>();
 
-    private static final String OWM_PREAMBLE = "http://api.openweathermap.org/data/2.5/weather?zip=";
-    private static final String OWM_POSTAMBLE = ",us&units=imperial&appid=";
-    private static final String OWM_KEY = "44db6a862fba0b067b1930da0d769e98";
+    protected static final String OWM_PREAMBLE = "http://api.openweathermap.org/data/2.5/weather?zip=";
+    protected static final String OWM_POSTAMBLE = ",us&units=imperial&appid=";
+    protected static final String OWM_KEY = "44db6a862fba0b067b1930da0d769e98";
 
     public GetWeatherTask(WeatherFragmentInterface fragmentInterface, ProgressDialog dialog)
     {
@@ -33,7 +32,7 @@ public class GetWeatherTask extends AsyncTask<Iterator, Void, Iterator>
         mWeatherFragment = fragmentInterface;
     }
  
-    private String httpGetResponse(String url) throws Exception
+    protected String httpGetResponse(String url) throws Exception
     {
         StringBuilder sb = new StringBuilder();
         HttpGet httpGet = new HttpGet(url);

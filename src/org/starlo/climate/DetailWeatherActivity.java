@@ -35,6 +35,34 @@ public class DetailWeatherActivity extends FragmentActivity
         TreeSet set = new TreeSet();
         set.add(getIntent().getStringExtra(MainActivity.DETAIL_INTENT_ZIP_PARAM));
         Iterator iterator = set.iterator();
-        new GetWeatherTask(mWeatherFragment, mDialog).execute(iterator);
+        new GetDetailWeatherTask(mWeatherFragment, mDialog).execute(iterator);
+    }
+
+    private class GetDetailWeatherTask extends GetWeatherTask
+    {
+        public GetDetailWeatherTask(WeatherFragmentInterface fragmentInterface, ProgressDialog dialog)
+        {
+            super(fragmentInterface, dialog);
+        }
+
+        protected Iterator doInBackground(Iterator... zipcodeIterator)
+        {
+            Iterator iterator = zipcodeIterator[0];
+            try
+            {
+                String zipcode = (String)iterator.next();
+                String buffer = httpGetResponse(OWM_PREAMBLE+zipcode+OWM_POSTAMBLE+OWM_KEY);
+                Weather sample = mGson.fromJson(buffer, Weather.class);
+                if(sample != null)
+                {
+                    sample.zipcode = zipcode;
+                    mValidWeather.add(sample);
+                }
+            }catch(Exception e)
+            {
+            }
+
+            return iterator;
+        }
     }
 }
