@@ -22,6 +22,8 @@ public class ZipcodeInputFragment extends Fragment
         mList = (ListView)view.findViewById(R.id.list);
         Button addButton = (Button)view.findViewById(R.id.add);
         addButton.setOnClickListener(new AddFieldListener());
+        Button nextButton = (Button)view.findViewById(R.id.next);
+        nextButton.setOnClickListener(new NextListener());
 
         updateAdapter(MainActivity.readPreferences(mContext));
 
@@ -74,6 +76,21 @@ public class ZipcodeInputFragment extends Fragment
                 }
             }
             updateAdapter(((MainActivity)mContext).writeBackPreferences(newList));
+        }
+    }
+
+    private class NextListener implements View.OnClickListener
+    {
+        public void onClick(View view)
+        {
+            Set<String> data = MainActivity.readPreferences(mContext);
+            String[] newList = new String[data.size()];
+            for(int i = 0; i < data.size(); i++)
+            {
+                newList[i] = readFromListUI(i);
+            }
+            updateAdapter(((MainActivity)mContext).writeBackPreferences(newList));
+            mContext.startActivity(new Intent(mContext, WeatherActivity.class));
         }
     }
 }
