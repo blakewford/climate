@@ -2,7 +2,6 @@ package org.starlo.climate;
 
 import android.os.*;
 import android.app.*;
-import android.util.*;
 
 import java.io.*;
 import java.util.*;
@@ -12,11 +11,13 @@ import org.apache.http.client.*;
 import org.apache.http.impl.client.*;
 import org.apache.http.client.methods.HttpGet;
 
+import com.google.gson.*;
 
 public class WeatherActivity extends Activity
 {
 
     private ProgressDialog mDialog = null;
+    private Gson mGson = new Gson(); //Take advantage of caching
 
     private static String OWM_PREAMBLE = "http://api.openweathermap.org/data/2.5/weather?zip=";
     private static String OWM_POSTAMBLE = ",us&appid=";
@@ -67,7 +68,8 @@ public class WeatherActivity extends Activity
             Iterator iterator = zipcodeIterator[0];
             try
             {
-                httpGetResponse(OWM_PREAMBLE+(String)iterator.next()+OWM_POSTAMBLE+OWM_KEY);
+                String buffer = httpGetResponse(OWM_PREAMBLE+(String)iterator.next()+OWM_POSTAMBLE+OWM_KEY);
+                Weather sample = mGson.fromJson(buffer, Weather.class);
             }catch(Exception e)
             {
             }
