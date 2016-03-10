@@ -17,7 +17,7 @@ import com.google.gson.*;
 public class CompareWeatherActivity extends FragmentActivity
 {
     private ProgressDialog mDialog = null;
-    private ArrayList<WeatherBrief> mValidWeather = null;
+    private ArrayList<Weather> mValidWeather = null;
     private CompareWeatherFragment mWeatherFragment = null;
 
     private Gson mGson = new Gson(); //Take advantage of caching
@@ -36,7 +36,7 @@ public class CompareWeatherActivity extends FragmentActivity
         mDialog.setTitle(getResources().getString(R.string.working));
         mDialog.setCancelable(false);
 
-        mValidWeather = new ArrayList<WeatherBrief>();
+        mValidWeather = new ArrayList<Weather>();
         mWeatherFragment = (CompareWeatherFragment)getFragmentManager().findFragmentById(R.id.weather);
 
         mDialog.show();
@@ -82,7 +82,7 @@ public class CompareWeatherActivity extends FragmentActivity
                 WeatherBrief sample = mGson.fromJson(buffer, WeatherBrief.class);
                 if(sample != null)
                 {
-                    mValidWeather.add(sample);
+                    mValidWeather.add(new Weather(sample));
                 }
             }catch(Exception e)
             {
@@ -99,7 +99,7 @@ public class CompareWeatherActivity extends FragmentActivity
             }
             else
             {
-                mWeatherFragment.setAdapter(mValidWeather.toArray(new WeatherBrief[mValidWeather.size()]));
+                mWeatherFragment.setAdapter(mValidWeather.toArray(new Weather[mValidWeather.size()]));
                 mDialog.dismiss();
             } 
         }

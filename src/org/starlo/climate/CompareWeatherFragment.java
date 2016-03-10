@@ -6,7 +6,7 @@ import android.view.*;
 import android.widget.*;
 import android.content.*;
 
-public class CompareWeatherFragment extends Fragment
+public class CompareWeatherFragment extends Fragment implements WeatherFragmentInterface
 {
     private ListView mList = null;
     private Context mContext = null;
@@ -22,7 +22,7 @@ public class CompareWeatherFragment extends Fragment
         return view;
     }
 
-    public void setAdapter(WeatherBrief[] items)
+    public void setAdapter(Weather[] items)
     {
         mAdapter = new WeatherArrayAdapter(mContext, 0, items);
         mList.setAdapter(mAdapter);

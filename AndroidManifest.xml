@@ -33,5 +33,9 @@
                   android:screenOrientation="portrait"
                   android:label="@string/app_name">
         </activity>
+        <activity android:name="DetailWeatherActivity"
+                  android:screenOrientation="portrait"
+                  android:label="@string/app_name">
+        </activity>
     </application>
 </manifest>
