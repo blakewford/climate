@@ -22,12 +22,15 @@ public class EditableArrayAdapter extends ArrayAdapter<String>
 
     public View getView(int position, View convertView, ViewGroup parent)
     {
-        View view = mInflater.inflate(R.layout.zipcode_item, null);
-        ((TextView)view.findViewById(R.id.text)).setText(mZipcodes[position]);
-        view.setTag(new Integer(position));
-        ((Button)view.findViewById(R.id.remove)).setOnClickListener(mRemovalCallback);
+        if(convertView == null)
+        {
+            convertView = mInflater.inflate(R.layout.zipcode_item, null);
+            ((TextView)convertView.findViewById(R.id.text)).setText(mZipcodes[position]);
+            convertView.setTag(Integer.valueOf(position));
+            ((Button)convertView.findViewById(R.id.remove)).setOnClickListener(mRemovalCallback);
+        }
 
-        return view;
+        return convertView;
     }
 
     public void setOnRemoveItemClickListener(View.OnClickListener listener)

@@ -21,9 +21,12 @@ public class WeatherArrayAdapter extends ArrayAdapter<Weather>
 
     public View getView(int position, View convertView, ViewGroup parent)
     {
-        View view = mInflater.inflate(R.layout.weather_item, null);
-        ((TextView)view.findViewById(R.id.location)).setText(mItems[position].name);
+        if(convertView == null)
+        {
+            convertView = mInflater.inflate(R.layout.weather_item, null);
+            ((TextView)convertView.findViewById(R.id.location)).setText(mItems[position].name);
+        }
 
-        return view;
+        return convertView;
     }
 }

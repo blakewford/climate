@@ -45,6 +45,10 @@ public class WeatherActivity extends FragmentActivity
         {
             new GetWeatherTask().execute(iterator);
         }
+        else
+        {
+            mDialog.dismiss();
+        }
     }
 
     private class GetWeatherTask extends AsyncTask<Iterator, Void, Iterator>

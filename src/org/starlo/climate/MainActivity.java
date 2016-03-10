@@ -14,7 +14,6 @@ public class MainActivity extends Activity
     public static final String SAVED_ZIP_CODES_KEY = "codes";
     public static final String SAVED_ZIP_CODES_FILE = "zipcodes";
 
-    private ProgressDialog mDialog = null;
     private final static Set<String> DEFAULT_ZIP_CODES =
         Collections.unmodifiableSet(new HashSet<String>(Arrays.asList("78757", "78758", "78759")));
 
@@ -23,10 +22,6 @@ public class MainActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-
-        mDialog = new ProgressDialog(this);
-        mDialog.setTitle(getResources().getString(R.string.working));
-        mDialog.setCancelable(false);
     }
 
     @Override
@@ -48,9 +43,10 @@ public class MainActivity extends Activity
     public TreeSet<String> writeBackPreferences(String[] list)
     {
         TreeSet<String> uniqueSet = new TreeSet<String>(Arrays.asList(list));
-        //Distracting at the moment, perhaps is uniqueSet.size() > some empirically tested value
-        //mDialog.show();
-        new WriteBackPreferencesTask().execute(uniqueSet);
+        SharedPreferences preferences = MainActivity.this.getSharedPreferences(MainActivity.SAVED_ZIP_CODES_FILE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putStringSet(SAVED_ZIP_CODES_KEY, uniqueSet);
+        editor.apply();
 
         return uniqueSet;
     }
@@ -62,23 +58,5 @@ public class MainActivity extends Activity
         set.addAll(preferences.getStringSet(SAVED_ZIP_CODES_KEY, DEFAULT_ZIP_CODES));
 
         return set;
-    }
-
-    private class WriteBackPreferencesTask extends AsyncTask<TreeSet<String>, Void, Void>
-    {
-        protected Void doInBackground(TreeSet<String>... zipcodes)
-        {
-            SharedPreferences preferences = MainActivity.this.getSharedPreferences(MainActivity.SAVED_ZIP_CODES_FILE, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putStringSet(SAVED_ZIP_CODES_KEY, zipcodes[0]);
-            editor.commit();
-
-            return null;
-        }
-
-        protected void onPostExecute(Void result)
-        {
-            mDialog.dismiss();
-        }
     }
 }
