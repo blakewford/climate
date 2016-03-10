@@ -28,40 +28,55 @@ public class ZipcodeInputFragment extends Fragment
         Button addButton = (Button)view.findViewById(R.id.add);
         addButton.setOnClickListener(new AddFieldListener());
 
-        SharedPreferences preferences = mContext.getSharedPreferences(SAVED_ZIP_CODES_FILE, Context.MODE_PRIVATE);
-        Set<String> data = preferences.getStringSet(SAVED_ZIP_CODES_KEY, DEFAULT_ZIP_CODES);
-        mAdapter = new EditableArrayAdapter(mContext, 0, data.toArray(new String[data.size()]));
-        mAdapter.setOnRemoveItemClickListener(new RemoveFieldListener());
-        mList.setAdapter(mAdapter);
+        updateAdapter(readPreferences());
 
         mDialog = new ProgressDialog(mContext);
-        mDialog.setTitle("Working...");
+        mDialog.setTitle(mContext.getResources().getString(R.string.working));
         mDialog.setCancelable(false);
 
         return view;
+    }
+
+    private void updateAdapter(Set<String> data)
+    {
+        mAdapter = new EditableArrayAdapter(mContext, 0, data.toArray(new String[data.size()]));
+        mAdapter.setOnRemoveItemClickListener(new RemoveFieldListener());
+        mList.setAdapter(mAdapter);
+    }
+
+    private String readFromListUI(int index)
+    {
+        View item = mList.getChildAt(index);
+        return ((TextView)item.findViewById(R.id.text)).getText().toString();
+    }
+
+    private Set<String> readPreferences()
+    {
+        SharedPreferences preferences = mContext.getSharedPreferences(SAVED_ZIP_CODES_FILE, Context.MODE_PRIVATE);
+        return preferences.getStringSet(SAVED_ZIP_CODES_KEY, DEFAULT_ZIP_CODES);
+    }
+
+    private void writeBackPreferences(String[] list)
+    {
+        HashSet<String> uniqueSet = new HashSet<String>(Arrays.asList(list));
+        mDialog.show();
+        new WriteBackPreferencesTask().execute(uniqueSet);
+        updateAdapter(uniqueSet);
     }
 
     private class AddFieldListener implements View.OnClickListener
     {
         public void onClick(View view)
         {
-            SharedPreferences preferences = mContext.getSharedPreferences(SAVED_ZIP_CODES_FILE, Context.MODE_PRIVATE);
-            Set<String> data = preferences.getStringSet(SAVED_ZIP_CODES_KEY, DEFAULT_ZIP_CODES);
+            Set<String> data = readPreferences();
             int size = data.size();
             String[] newList = new String[size+1];
             for(int i = 0; i < size; i++)
             {
-                View item = mList.getChildAt(i);
-                newList[i] = ((TextView)item.findViewById(R.id.text)).getText().toString();
+                newList[i] = readFromListUI(i);
             }
             newList[size] = "";
-
-            HashSet<String> uniqueSet = new HashSet<String>(Arrays.asList(newList));
-            mDialog.show();
-            new WriteBackPreferencesTask().execute(uniqueSet);
-            mAdapter = new EditableArrayAdapter(getActivity(), 0, uniqueSet.toArray(new String[uniqueSet.size()]));
-            mAdapter.setOnRemoveItemClickListener(new RemoveFieldListener());
-            mList.setAdapter(mAdapter);
+            writeBackPreferences(newList);
         }
     }
 
@@ -69,8 +84,7 @@ public class ZipcodeInputFragment extends Fragment
     {
         public void onClick(View view)
         {
-            SharedPreferences preferences = mContext.getSharedPreferences(SAVED_ZIP_CODES_FILE, Context.MODE_PRIVATE);
-            Set<String> data = preferences.getStringSet(SAVED_ZIP_CODES_KEY, DEFAULT_ZIP_CODES);
+            Set<String> data = readPreferences();
 
             int index = 0;
             String[] newList = new String[data.size()-1];
@@ -79,16 +93,10 @@ public class ZipcodeInputFragment extends Fragment
             {
                 if(i != position)
                 {
-                    View item = mList.getChildAt(i);
-                    newList[index++] = ((TextView)item.findViewById(R.id.text)).getText().toString();
+                    newList[index++] = readFromListUI(i);
                 }
             }
-            HashSet<String> uniqueSet = new HashSet<String>(Arrays.asList(newList));
-            mDialog.show();
-            new WriteBackPreferencesTask().execute(uniqueSet);
-            mAdapter = new EditableArrayAdapter(getActivity(), 0, uniqueSet.toArray(new String[uniqueSet.size()]));
-            mAdapter.setOnRemoveItemClickListener(new RemoveFieldListener());
-            mList.setAdapter(mAdapter);
+            writeBackPreferences(newList);
         }
     }
 
