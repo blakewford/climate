@@ -12,12 +12,7 @@ public class ZipcodeInputFragment extends Fragment
 {
     private ListView mList = null;
     private Context mContext = null;
-    private ProgressDialog mDialog = null;
     private EditableArrayAdapter mAdapter = null;
-    private final String SAVED_ZIP_CODES_KEY = "codes";
-    private final String SAVED_ZIP_CODES_FILE = "zipcodes";
-    private final static Set<String> DEFAULT_ZIP_CODES =
-        Collections.unmodifiableSet(new HashSet<String>(Arrays.asList("78757", "78758", "78759")));
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -28,11 +23,7 @@ public class ZipcodeInputFragment extends Fragment
         Button addButton = (Button)view.findViewById(R.id.add);
         addButton.setOnClickListener(new AddFieldListener());
 
-        updateAdapter(readPreferences());
-
-        mDialog = new ProgressDialog(mContext);
-        mDialog.setTitle(mContext.getResources().getString(R.string.working));
-        mDialog.setCancelable(false);
+        updateAdapter(MainActivity.readPreferences(mContext));
 
         return view;
     }
@@ -50,25 +41,11 @@ public class ZipcodeInputFragment extends Fragment
         return ((TextView)item.findViewById(R.id.text)).getText().toString();
     }
 
-    private Set<String> readPreferences()
-    {
-        SharedPreferences preferences = mContext.getSharedPreferences(SAVED_ZIP_CODES_FILE, Context.MODE_PRIVATE);
-        return preferences.getStringSet(SAVED_ZIP_CODES_KEY, DEFAULT_ZIP_CODES);
-    }
-
-    private void writeBackPreferences(String[] list)
-    {
-        HashSet<String> uniqueSet = new HashSet<String>(Arrays.asList(list));
-        mDialog.show();
-        new WriteBackPreferencesTask().execute(uniqueSet);
-        updateAdapter(uniqueSet);
-    }
-
     private class AddFieldListener implements View.OnClickListener
     {
         public void onClick(View view)
         {
-            Set<String> data = readPreferences();
+            Set<String> data = MainActivity.readPreferences(mContext);
             int size = data.size();
             String[] newList = new String[size+1];
             for(int i = 0; i < size; i++)
@@ -76,7 +53,7 @@ public class ZipcodeInputFragment extends Fragment
                 newList[i] = readFromListUI(i);
             }
             newList[size] = "";
-            writeBackPreferences(newList);
+            updateAdapter(((MainActivity)mContext).writeBackPreferences(newList));
         }
     }
 
@@ -84,7 +61,7 @@ public class ZipcodeInputFragment extends Fragment
     {
         public void onClick(View view)
         {
-            Set<String> data = readPreferences();
+            Set<String> data = MainActivity.readPreferences(mContext);
 
             int index = 0;
             String[] newList = new String[data.size()-1];
@@ -96,25 +73,7 @@ public class ZipcodeInputFragment extends Fragment
                     newList[index++] = readFromListUI(i);
                 }
             }
-            writeBackPreferences(newList);
-        }
-    }
-
-    private class WriteBackPreferencesTask extends AsyncTask<HashSet<String>, Void, Void>
-    {
-        protected Void doInBackground(HashSet<String>... zipcodes)
-        {
-            SharedPreferences preferences = mContext.getSharedPreferences(SAVED_ZIP_CODES_FILE, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putStringSet(SAVED_ZIP_CODES_KEY, zipcodes[0]);
-            editor.commit();
-
-            return null;
-        }
-
-        protected void onPostExecute(Void result)
-        {
-            mDialog.dismiss();
+            updateAdapter(((MainActivity)mContext).writeBackPreferences(newList));
         }
     }
 }
