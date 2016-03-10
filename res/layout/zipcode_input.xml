@@ -13,6 +13,14 @@
 <Button
     android:id="@+id/add"
     android:text="+"
+    android:layout_alignParentRight="true"
+    android:layout_above="@+id/next"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    />
+<Button
+    android:id="@+id/next"
+    android:text=">"
     android:layout_alignParentBottom="true"
     android:layout_alignParentRight="true"
     android:layout_width="wrap_content"
