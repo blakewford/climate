@@ -10,9 +10,9 @@ import java.util.*;
 
 public class MainActivity extends Activity
 {
-
     public static final String SAVED_ZIP_CODES_KEY = "codes";
     public static final String SAVED_ZIP_CODES_FILE = "zipcodes";
+    public static final String DETAIL_INTENT_ZIP_PARAM = "zipcode";
 
     private final static Set<String> DEFAULT_ZIP_CODES =
         Collections.unmodifiableSet(new HashSet<String>(Arrays.asList("78757", "78758", "78759")));

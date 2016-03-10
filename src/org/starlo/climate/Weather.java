@@ -10,6 +10,7 @@ public class Weather extends WeatherBrief
         weather = brief.weather;
         main = brief.main;
         name = brief.name;
+        zipcode = brief.zipcode;
 
         dt = 0L;
         id = 0L;

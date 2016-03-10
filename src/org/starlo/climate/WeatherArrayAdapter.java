@@ -28,6 +28,7 @@ public class WeatherArrayAdapter extends ArrayAdapter<WeatherBrief>
             ((TextView)convertView.findViewById(R.id.temp)).setText(brief.main.temp.toString()+" F");
             ((TextView)convertView.findViewById(R.id.condition)).setText(brief.weather[0].main);
             ((TextView)convertView.findViewById(R.id.location)).setText(brief.name);
+            convertView.setTag(brief);
         }
 
         return convertView;
