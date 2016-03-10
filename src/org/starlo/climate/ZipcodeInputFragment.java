@@ -12,6 +12,7 @@ public class ZipcodeInputFragment extends Fragment
 {
     private ListView mList = null;
     private Context mContext = null;
+    private ProgressDialog mDialog = null;
     private EditableArrayAdapter mAdapter = null;
     private final String SAVED_ZIP_CODES_KEY = "codes";
     private final String SAVED_ZIP_CODES_FILE = "zipcodes";
@@ -33,6 +34,10 @@ public class ZipcodeInputFragment extends Fragment
         mAdapter.setOnRemoveItemClickListener(new RemoveFieldListener());
         mList.setAdapter(mAdapter);
 
+        mDialog = new ProgressDialog(mContext);
+        mDialog.setTitle("Working...");
+        mDialog.setCancelable(false);
+
         return view;
     }
 
@@ -50,11 +55,10 @@ public class ZipcodeInputFragment extends Fragment
                 newList[i] = ((TextView)item.findViewById(R.id.text)).getText().toString();
             }
             newList[size] = "";
-            SharedPreferences.Editor editor = preferences.edit();
-            HashSet<String> uniqueSet = new HashSet<String>(Arrays.asList(newList));
-            editor.putStringSet(SAVED_ZIP_CODES_KEY, uniqueSet);
-            editor.commit();
 
+            HashSet<String> uniqueSet = new HashSet<String>(Arrays.asList(newList));
+            mDialog.show();
+            new WriteBackPreferencesTask().execute(uniqueSet);
             mAdapter = new EditableArrayAdapter(getActivity(), 0, uniqueSet.toArray(new String[uniqueSet.size()]));
             mAdapter.setOnRemoveItemClickListener(new RemoveFieldListener());
             mList.setAdapter(mAdapter);
@@ -66,6 +70,24 @@ public class ZipcodeInputFragment extends Fragment
         public void onClick(View view)
         {
             Integer position = (Integer)((View)view.getParent()).getTag();
+        }
+    }
+
+    private class WriteBackPreferencesTask extends AsyncTask<HashSet<String>, Void, Void>
+    {
+        protected Void doInBackground(HashSet<String>... zipcodes)
+        {
+            SharedPreferences preferences = mContext.getSharedPreferences(SAVED_ZIP_CODES_FILE, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putStringSet(SAVED_ZIP_CODES_KEY, zipcodes[0]);
+            editor.commit();
+
+            return null;
+        }
+
+        protected void onPostExecute(Void result)
+        {
+            mDialog.dismiss();
         }
     }
 }
