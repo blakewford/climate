@@ -4,7 +4,7 @@ public class Weather extends WeatherBrief
 {
     public Coordinates coord;
     public WindReport wind;
-    public CloudReport cloud;
+    public CloudReport clouds;
     public RainReport rain;
     public SnowReport snow;
     public Long dt;
