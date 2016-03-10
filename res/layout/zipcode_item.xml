@@ -14,7 +14,15 @@
     android:maxLength="5"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:layout_weight="9"
+    android:layout_weight="8"
+    />
+<Button
+    android:id="@+id/single_next"
+    android:text=">"
+    android:layout_gravity="center_vertical|center_horizontal"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
     />
 <Button
     android:id="@+id/remove"

@@ -9,6 +9,7 @@ public class EditableArrayAdapter extends ArrayAdapter<String>
     private Context mContext = null;
     private String[] mZipcodes = null;
     private LayoutInflater mInflater = null;
+    private View.OnClickListener mDetailCallback = null;
     private View.OnClickListener mRemovalCallback = null;
 
     public EditableArrayAdapter(Context context, int resource, String[] zipcodes)
@@ -27,6 +28,7 @@ public class EditableArrayAdapter extends ArrayAdapter<String>
             convertView = mInflater.inflate(R.layout.zipcode_item, null);
             ((TextView)convertView.findViewById(R.id.text)).setText(mZipcodes[position]);
             convertView.setTag(Integer.valueOf(position));
+            ((Button)convertView.findViewById(R.id.single_next)).setOnClickListener(mDetailCallback);
             ((Button)convertView.findViewById(R.id.remove)).setOnClickListener(mRemovalCallback);
         }
 
@@ -36,5 +38,10 @@ public class EditableArrayAdapter extends ArrayAdapter<String>
     public void setOnRemoveItemClickListener(View.OnClickListener listener)
     {
         mRemovalCallback = listener;
+    }
+
+    public void setOnSingleItemClickListener(View.OnClickListener listener)
+    {
+        mDetailCallback = listener;
     }
 }

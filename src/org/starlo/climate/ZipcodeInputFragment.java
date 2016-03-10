@@ -33,6 +33,7 @@ public class ZipcodeInputFragment extends Fragment
     private void updateAdapter(Set<String> data)
     {
         mAdapter = new EditableArrayAdapter(mContext, 0, data.toArray(new String[data.size()]));
+        mAdapter.setOnSingleItemClickListener(new SingleNextListener());
         mAdapter.setOnRemoveItemClickListener(new RemoveFieldListener());
         mList.setAdapter(mAdapter);
     }
@@ -91,6 +92,17 @@ public class ZipcodeInputFragment extends Fragment
             }
             updateAdapter(((MainActivity)mContext).writeBackPreferences(newList));
             mContext.startActivity(new Intent(mContext, CompareWeatherActivity.class));
+        }
+    }
+
+    private class SingleNextListener implements View.OnClickListener
+    {
+        public void onClick(View view)
+        {
+            Intent intent = new Intent(mContext, DetailWeatherActivity.class);
+            View parent = (View)view.getParent();
+            intent.putExtra(MainActivity.DETAIL_INTENT_ZIP_PARAM,((TextView)parent.findViewById(R.id.text)).getText().toString());
+            mContext.startActivity(intent);
         }
     }
 }
