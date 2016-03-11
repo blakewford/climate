@@ -23,7 +23,7 @@ public class GetWeatherTask extends AsyncTask<Iterator, Void, Iterator>
 
     public static final String OWM_PREAMBLE = "http://api.openweathermap.org/data/2.5/weather?zip=";
     public static final String OWM_POSTAMBLE = ",us&units=imperial&appid=";
-    public static final String OWM_KEY = "44db6a862fba0b067b1930da0d769e98";
+    public static final String OWM_KEY = "ed901f69b5c339307e56121b5636e0c9";
 
     public GetWeatherTask(WeatherFragmentInterface fragmentInterface, ProgressDialog dialog)
     {
