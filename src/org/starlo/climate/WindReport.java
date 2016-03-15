@@ -4,4 +4,5 @@ public class WindReport
 {
     public Float speed;
     public Float deg;
+    public Float gust;
 }

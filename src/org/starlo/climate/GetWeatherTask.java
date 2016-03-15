@@ -48,7 +48,9 @@ public class GetWeatherTask extends AsyncTask<Iterator, Void, Iterator>
             instream.close();
         }
 
-        return sb.toString();
+        String buffer = sb.toString();
+        //Cached buffer in a cross platform way and reevaluate every 10 minutes
+        return buffer;
     }
 
     protected Iterator doInBackground(Iterator... zipcodeIterator)
